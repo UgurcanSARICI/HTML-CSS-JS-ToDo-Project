@@ -75,4 +75,36 @@ function createListElement(newTodo) {
 }
 
 
+//!If an event comes from any of the children of the ul element, detect it and take action. (Capturing)
+todoUl.addEventListener("click", (e) => {
+    console.log(e.target);
+  
+    const id = e.target.parentElement.getAttribute("id");
+    //! event, bir delete butonundan geldi ise
+    if (e.target.classList.contains("fa-trash")) {
+      //? delete parent of delete button from DOM
+      e.target.parentElement.remove();
+  
+      //? Delete related element of array
+      todos = todos.filter((todo) => todo.id !== Number(id));
+  
+      //? save final todos array to localStorage
+      localStorage.setItem("TODOS", JSON.stringify(todos));
+    } else if (e.target.classList.contains("fa-check")) {
+      //! If the event came from an okey button
+      //? If the relevant li element has a class named checked, delete it, otherwise add it (DOM)
+      e.target.parentElement.classList.toggle("checked");
+    }
+  });
 
+  //? Adding is possible with the enter key
+todoInput.addEventListener("keydown", (e) => {
+    if (e.code === "Enter") {
+      addBtn.click();
+    }
+  });
+  
+  //? Let the input be active at the start
+  window.onload = function () {
+    todoInput.focus();
+  };
